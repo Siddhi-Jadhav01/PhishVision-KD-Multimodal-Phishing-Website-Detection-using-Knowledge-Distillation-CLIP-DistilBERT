@@ -1,169 +1,153 @@
-# ViTPhishFusion: Multimodal Phishing Website Detection
+# PhishVision-KD
 
-A multimodal phishing website detection system that combines **Vision Transformer (ViT)** screenshot embeddings with **URL intelligence features** to identify fraudulent websites. The model leverages both visual and lexical cues to detect sophisticated phishing attacks that often evade traditional blacklist and rule-based approaches.
+A multimodal phishing website detection framework that combines computer vision, natural language processing, and knowledge distillation to identify fraudulent websites from webpage screenshots and URLs.
 
----
+The project benchmarks three advanced architectures:
 
-## Overview
+* Knowledge-Distilled Multimodal Ensemble
+* CLIP + DistilBERT + URL Features
+* Vision Transformer (ViT) + URL Features
 
-Phishing websites increasingly mimic legitimate websites using realistic layouts, logos, and branding. Traditional URL-based detection systems often fail to identify these visually deceptive attacks.
-
-**ViTPhishFusion** addresses this challenge by fusing:
-
-* Visual features extracted from website screenshots using Vision Transformers (ViT)
-* Engineered lexical features extracted from URLs
-
-This multimodal approach enables robust detection of phishing websites by analyzing both how a website looks and how its URL is structured.
+using a custom dataset of 6,000 phishing and legitimate websites.
 
 ---
 
-## Key Features
+## Motivation
 
-* Vision Transformer (ViT) based screenshot analysis
-* URL lexical feature engineering
-* Multimodal feature fusion architecture
-* Custom dataset of 6,000 websites
-* Real-world phishing and legitimate samples
-* Robust detection of visually deceptive phishing attacks
-* Scalable architecture for future deployment
+Modern phishing websites closely imitate legitimate websites through visual spoofing, brand impersonation, and URL manipulation.
+
+Traditional blacklist-based systems often fail against these attacks.
+
+This project explores whether multimodal deep learning can effectively detect phishing websites by jointly analyzing:
+
+* Website screenshots
+* URL semantics
+* URL lexical characteristics
 
 ---
 
 ## Dataset
 
-A custom dataset was created consisting of:
+Custom dataset built from scratch:
 
 | Category            | Samples |
 | ------------------- | ------- |
 | Phishing Websites   | 3,000   |
 | Legitimate Websites | 3,000   |
-| Total Samples       | 6,000   |
+| Total               | 6,000   |
 
 Each sample contains:
 
-* Website Screenshot
+* Webpage Screenshot
 * Website URL
-* Binary Label (Phishing / Legitimate)
+* Binary Label
+
+Dataset designed using active phishing campaigns and verified legitimate websites.
 
 ---
 
-## URL Features Extracted
+## Models Evaluated
 
-The following handcrafted lexical features are extracted:
+### 1. Knowledge-Distilled Multimodal Ensemble
 
-* URL Length
-* Number of Dots
-* Number of Hyphens
-* Number of Digits
-* Number of '@' Symbols
-* HTTPS Presence
-* IP Address Detection
-* Suspicious Keyword Detection
+Teacher Ensemble:
 
-All features are standardized using StandardScaler before training.
+* TinyCNN
+* MobileNetV3-Small
+* URL-MLP
 
----
+Student Network:
 
-## 🏗️ Model Architecture
+* Lightweight CNN
+* URL Feature Encoder
+* Distillation-based Learning
 
-### Step 1: Image Processing
+Advantages:
 
-* Resize screenshots to 224 × 224
-* Normalize pixel values
-* Extract embeddings using pretrained ViT
-
-### Step 2: URL Feature Engineering
-
-* Extract lexical URL features
-* Normalize features
-
-### Step 3: Feature Fusion
-
-* Concatenate ViT embeddings with URL features
-
-### Step 4: Classification
-
-* Fully Connected Layers
-* ReLU Activation
-* Dropout Regularization
-* Sigmoid Output Layer
+* Resource-efficient
+* Fast inference
+* Real-time deployment ready
 
 ---
 
-## 📈 Results
+### 2. CLIP + DistilBERT + URL Features
 
-| Metric   | Score |
-| -------- | ----- |
-| Accuracy | 80%   |
-| Recall   | 85%   |
-| F1 Score | 0.80  |
+Multimodal architecture combining:
 
-The high recall demonstrates strong capability in identifying phishing websites while minimizing undetected threats.
+* CLIP Visual Encoder
+* DistilBERT URL Encoder
+* Engineered URL Features
+
+Captures:
+
+* Visual webpage patterns
+* URL semantics
+* Structural phishing indicators
 
 ---
 
-## 🛠️ Tech Stack
+### 3. ViTPhishFusion
 
-### Machine Learning
-
-* PyTorch
-* Hugging Face Transformers
-* Scikit-Learn
-
-### Data Processing
-
-* Pandas
-* NumPy
-
-### Computer Vision
+Hybrid model combining:
 
 * Vision Transformer (ViT)
-* PIL
-* OpenCV
+* URL Lexical Features
 
-### Visualization
+Designed to capture:
 
-* Matplotlib
-* Seaborn
-
----
-
-## Training
-
-```bash
-python train.py
-```
+* Layout inconsistencies
+* Brand impersonation
+* Visual spoofing patterns
 
 ---
 
-## Inference
+## Results
 
-```bash
-python predict.py
-```
+| Model             | Accuracy | Precision | Recall | F1 Score | ROC-AUC |
+| ----------------- | -------- | --------- | ------ | -------- | ------- |
+| KD Multimodal     | 90.27%   | 0.797     | 0.893  | 0.843    | 0.855   |
+| CLIP + DistilBERT | 95.21%   | 0.943     | 0.902  | 0.911    | 0.934   |
+| ViT Fusion        | 80.93%   | 0.80      | 0.82   | 0.81     | 0.78    |
 
-Input:
-
-* Website Screenshot
-* URL
-
-Output:
-
-* Phishing
-* Legitimate
+The CLIP-BERT model achieved the strongest overall performance, while the distilled model provided the best trade-off between efficiency and accuracy.
 
 ---
 
-## Future Enhancements
+## Key Contributions
 
-* Knowledge Distillation
-* Lightweight Student Models
-* Browser Extension Integration
-* Real-Time Detection API
-* Streamlit Deployment
+* Built a custom phishing dataset with 6,000 websites.
+* Benchmarked three state-of-the-art multimodal architectures.
+* Implemented ensemble knowledge distillation for lightweight deployment.
+* Combined screenshot analysis with URL intelligence.
+* Developed a Streamlit-based real-time phishing detection interface.
+* Achieved up to 95.21% accuracy on phishing website detection.
+
+---
+
+## Tech Stack
+
+* Python
+* PyTorch
+* Hugging Face Transformers
+* CLIP
+* DistilBERT
+* Vision Transformer (ViT)
+* MobileNetV3
+* Scikit-Learn
+* Pandas
+* NumPy
+* Streamlit
+
+---
+
+## Future Work
+
+* Browser Extension
+* Real-Time API Deployment
 * Explainable AI Dashboard
-* Fine-Tuning of ViT Backbone
-* Larger Multimodal Dataset
+* Advanced Teacher Ensembles
+* Lightweight Edge Deployment
+* Zero-Day Phishing Detection Enhancement
 
 ---
 
@@ -173,9 +157,3 @@ Output:
 Information Technology
 
 National Institute of Technology Kurukshetra
-
----
-
-## License
-
-This project is intended for educational and research purposes.
