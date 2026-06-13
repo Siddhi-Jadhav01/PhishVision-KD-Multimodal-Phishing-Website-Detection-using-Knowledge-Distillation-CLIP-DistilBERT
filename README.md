@@ -1,0 +1,2 @@
+# ViTPhishFusion-Detecting-Fraudulent-Websites-through-Screenshot-Understanding-and-URL-Feature-Fusion
+Developed ViTPhishFusion, a multimodal phishing website detection system that combines Vision Transformer (ViT) screenshot embeddings with engineered URL intelligence features. Trained on a custom dataset of 6,000 websites, the model achieved 80% accuracy and 85% recall, enabling robust detection of visually deceptive phishing attacks.
